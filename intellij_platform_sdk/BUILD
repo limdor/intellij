@@ -499,7 +499,7 @@ java_library(
         # so we need to provide this to our tests
         intellij = [":kotlinc_version"],
     ),
-    exports = [":plugin_api_internal"],
+    exports = [":plugin_api_repackaged"],
 )
 
 # These libraries should only be used by open-source plugins.
