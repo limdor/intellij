@@ -64,7 +64,7 @@ public class LibraryEditor {
     Optional<LibraryConverter> libraryConverter =
         LibraryConverter.getFirstAvailableLibraryConverter();
     if (libraryConverter.isEmpty()) {
-      logger.error("Fail to access any library converter");
+      logger.error("Failed to access any library converter");
       return;
     }
     for (Library library : modelsProvider.getAllLibraries()) {
@@ -81,7 +81,7 @@ public class LibraryEditor {
       libraries.forEach(
           library ->
               libraryNameToBlazeLibraryModelModifier.computeIfAbsent(
-                  libraryConverter.get().getLibraryName(library),
+                  libraryConverter.get().getLibraryName(project, library),
                   key ->
                       libraryConverter
                           .get()
@@ -111,7 +111,7 @@ public class LibraryEditor {
 
       ImmutableSet<String> newLibraryKeys =
           libraries.stream()
-              .map(library -> libraryConverter.get().getLibraryName(library))
+              .map(library -> libraryConverter.get().getLibraryName(project, library))
               .collect(toImmutableSet());
       for (LibraryKey libraryKey : intelliJLibraryState) {
         String libraryIntellijName = libraryKey.getIntelliJLibraryName();
@@ -153,7 +153,7 @@ public class LibraryEditor {
                 ep.getBlazeLibraryModelModifier(
                         project, artifactLocationDecoder, modelsProvider, blazeLibrary)
                     .updateModifiableModel(),
-            () -> logger.error("Fail to access any library converter"));
+            () -> logger.error("Failed to access any library converter"));
   }
 
   /**
@@ -169,7 +169,9 @@ public class LibraryEditor {
    * @param libraries the libraries to add as dependencies
    */
   public static void configureDependencies(
-      ModifiableRootModel modifiableRootModel, Collection<BlazeLibrary> libraries) {
+      Project project,
+      ModifiableRootModel modifiableRootModel,
+      Collection<BlazeLibrary> libraries) {
     LibraryTable libraryTable =
         LibraryTablesRegistrar.getInstance().getLibraryTable(modifiableRootModel.getProject());
     Optional<LibraryConverter> libraryConverter =
@@ -180,7 +182,7 @@ public class LibraryEditor {
     }
     ImmutableSet<String> libraryNames =
         libraries.stream()
-            .map(library -> libraryConverter.get().getLibraryName(library))
+            .map(library -> libraryConverter.get().getLibraryName(project, library))
             .collect(toImmutableSet());
 
     ImmutableList<Library> foundLibraries = findLibraries(libraryNames, libraryTable);

@@ -56,7 +56,7 @@ public interface LibraryConverter {
    * {@link BlazeLibrary} sharing the same name. It's possible to have duplication when you try to
    * get library name for a list of {@link BlazeLibrary}.
    */
-  String getLibraryName(BlazeLibrary library);
+  String getLibraryName(Project project, BlazeLibrary library);
 
   /**
    * Converts from {@link BlazeLibrary} to {@link BlazeLibraryModelModifier} which provide access to

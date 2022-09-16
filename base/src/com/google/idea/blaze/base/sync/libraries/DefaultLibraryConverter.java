@@ -24,7 +24,7 @@ import com.intellij.openapi.externalSystem.service.project.IdeModifiableModelsPr
 import com.intellij.openapi.project.Project;
 
 /**
- * The default implementation of {@link LibraryConverter} that makes sure at least one {@link
+ * The default implementation of {@link LibraryConverter} that makes sure that at least one {@link
  * LibraryConverter} is available.
  */
 public class DefaultLibraryConverter implements LibraryConverter {
@@ -35,7 +35,7 @@ public class DefaultLibraryConverter implements LibraryConverter {
   }
 
   @Override
-  public String getLibraryName(BlazeLibrary library) {
+  public String getLibraryName(Project project, BlazeLibrary library) {
     return library.key.getIntelliJLibraryName();
   }
 
