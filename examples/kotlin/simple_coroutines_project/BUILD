@@ -24,6 +24,7 @@ kt_jvm_test(
     name = "test_greeting",
     srcs = ["test/GreetingTest.kt"],
     test_class = "test.GreetingTest",
+    runtime_deps = ["@diffutils//jar"],
     deps = [
         ":greeting_lib",
         "@junit//jar",

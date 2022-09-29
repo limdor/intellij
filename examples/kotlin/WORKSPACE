@@ -1,0 +1,66 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:jvm.bzl", "jvm_maven_import_external")
+
+# LICENSE: Common Public License 1.0
+jvm_maven_import_external(
+    name = "junit",
+    artifact = "junit:junit:4.12",
+    artifact_sha256 = "59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a",
+    licenses = ["notice"],  # Common Public License 1.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
+
+jvm_maven_import_external(
+    name = "truth",
+    artifact = "com.google.truth:truth:0.42",
+    artifact_sha256 = "dd652bdf0c4427c59848ac0340fd6b6d20c2cbfaa3c569a8366604dbcda5214c",
+    licenses = ["notice"],  # Apache 2.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
+
+# LICENSE: The Apache Software License, Version 2.0
+rules_kotlin_version = "1.7.0-RC-1"
+
+rules_kotlin_sha = "68b910730026921814d3a504ccbe9adaac9938983d940e626523e6e4ecfb0355"
+
+http_archive(
+    name = "io_bazel_rules_kotlin",
+    sha256 = rules_kotlin_sha,
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
+)
+
+load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
+
+kotlin_repositories()
+
+load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
+
+kt_register_toolchains()
+
+# Without this dependency, when a test that uses Google truth fails, instead of
+# the textual difference we get java.lang.NoClassDefFoundError: difflib/DiffUtils
+jvm_maven_import_external(
+    name = "diffutils",
+    artifact = "com.googlecode.java-diff-utils:diffutils:1.2.1",
+    artifact_sha256 = "c98697c3b8dd745353cd0a83b109c1c999fec43b4a5cedb2f579452d8da2c171",
+    licenses = ["notice"],  # Apache 2.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
+
+# Dependency needed for kotlin coroutines library
+jvm_maven_import_external(
+    name = "kotlinx_coroutines",
+    artifact = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.2",
+    artifact_sha256 = "09aac136027678db2d3c2696696202719af9213ba17ae076f4c4421008885bcb",
+    licenses = ["notice"],  # Apache 2.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
+
+# Dependency needed for kotlin coroutines test library
+jvm_maven_import_external(
+    name = "kotlinx_coroutines_test",
+    artifact = "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.6.2",
+    artifact_sha256 = "6eb5c29f60fcacde882b1d393bf9a2fe9535bece1c707396fdbd755559dc043d",
+    licenses = ["notice"],  # Apache 2.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
