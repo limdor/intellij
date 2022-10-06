@@ -146,6 +146,24 @@ DIRECT_IJ_PRODUCTS = {
     ),
 }
 
+def plugin_api_dir_name():
+    """Returns the current IJ version subdirectory.
+
+    Returns:
+        The directory within //intellij_platform_sdk that is
+        used to load the plugin API from, according to the current
+        configuration.
+    """
+    select_params = {
+        ("//intellij_platform_sdk:%s" % product): DIRECT_IJ_PRODUCTS[value].directory
+        for (product, value) in INDIRECT_IJ_PRODUCTS.items()
+        if value in DIRECT_IJ_PRODUCTS
+    }
+    return select(
+        select_params,
+        no_match_error = "define an intellij product version, e.g. --define=ij_product=intellij-latest",
+    )
+
 def select_for_plugin_api(params):
     """Selects for a plugin_api.
 
